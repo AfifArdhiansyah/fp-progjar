@@ -28,6 +28,12 @@ class ChatClient:
                 for w in j[2:]:
                    message="{} {}" . format(message,w)
                 return self.sendmessage(usernameto,message)
+            elif (command=='sendgroup'):
+                usernamesto = j[1].strip()
+                message=""
+                for w in j[2:]:
+                    message="{} {}" . format(message,w)
+                return self.send_group_message(usernamesto,message)
             elif (command=='inbox'):
                 return self.inbox()
             else:
