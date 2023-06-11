@@ -82,6 +82,17 @@ class ChatClient:
             return "{}" . format(json.dumps(result['messages']))
         else:
             return "Error, {}" . format(result['message'])
+    def realm_inbox(self, realmid):
+        if (self.tokenid==""):
+            return "Error, not authorized"
+        string="getrealminbox {} {} \r\n" . format(self.tokenid, realmid)
+        print("Sending: " + string)
+        result = self.sendstring(string)
+        print("Received: " + str(result))
+        if result['status']=='OK':
+            return "Message received from realm {}: {}".format(realmid, result['messages'])
+        else:
+            return "Error, {}".format(result['message'])
     def send_group_message(self,usernames_to="xxx",message="xxx"):
         if (self.tokenid==""):
             return "Error, not authorized"
