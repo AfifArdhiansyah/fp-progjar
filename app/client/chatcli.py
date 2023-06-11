@@ -28,6 +28,12 @@ class ChatClient:
                 for w in j[2:]:
                    message="{} {}" . format(message,w)
                 return self.sendmessage(usernameto,message)
+            elif (command=='sendgroup'):
+                usernamesto = j[1].strip()
+                message=""
+                for w in j[2:]:
+                    message="{} {}" . format(message,w)
+                return self.send_group_message(usernamesto,message)
             elif (command=='inbox'):
                 return self.inbox()
             else:
@@ -74,6 +80,16 @@ class ChatClient:
         result = self.sendstring(string)
         if result['status']=='OK':
             return "{}" . format(json.dumps(result['messages']))
+        else:
+            return "Error, {}" . format(result['message'])
+    def send_group_message(self,usernames_to="xxx",message="xxx"):
+        if (self.tokenid==""):
+            return "Error, not authorized"
+        string="sendgroup {} {} {} \r\n" . format(self.tokenid,usernames_to,message)
+        print(string)
+        result = self.sendstring(string)
+        if result['status']=='OK':
+            return "message sent to {}" . format(usernames_to)
         else:
             return "Error, {}" . format(result['message'])
 
