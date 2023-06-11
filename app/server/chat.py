@@ -48,9 +48,12 @@ class Chat:
 	def __init__(self):
 		self.sessions={}
 		self.users = {}
-		self.users['messi']={ 'nama': 'Lionel Messi', 'negara': 'Argentina', 'password': 'surabaya', 'incoming' : {}, 'outgoing': {}}
-		self.users['henderson']={ 'nama': 'Jordan Henderson', 'negara': 'Inggris', 'password': 'surabaya', 'incoming': {}, 'outgoing': {}}
-		self.users['lineker']={ 'nama': 'Gary Lineker', 'negara': 'Inggris', 'password': 'surabaya','incoming': {}, 'outgoing':{}}
+		self.users['dhafin']={ 'nama': 'Dhafin Almas', 'negara': 'Indonesia', 'password': 'Sidoarjo', 'incoming' : {}, 'outgoing': {}}
+		self.users['rendi']={ 'nama': 'Rendi Dwi', 'negara': 'Indonesia', 'password': 'Kediri', 'incoming' : {}, 'outgoing': {}}
+		self.users['fanny']={ 'nama': 'Fanny Faizul', 'negara': 'Indonesia', 'password': 'Bojonegoro', 'incoming' : {}, 'outgoing': {}}
+		self.users['fian']={ 'nama': 'Fian Awamiry', 'negara': 'Indonesia', 'password': 'Lumajang', 'incoming' : {}, 'outgoing': {}}
+		self.users['nur']={ 'nama': 'Nur Muhammad', 'negara': 'Indonesia', 'password': 'Madiun', 'incoming' : {}, 'outgoing': {}}
+		self.users['afif']={ 'nama': 'Afif Dwi', 'negara': 'Indonesia', 'password': 'Gresik', 'incoming' : {}, 'outgoing': {}}
 	def proses(self,data):
 		j=data.split(" ")
 		try:
@@ -291,23 +294,23 @@ class Chat:
 
 if __name__=="__main__":
 	j = Chat()
-	sesi = j.proses("auth messi surabaya")
+	sesi = j.proses("auth nur surabaya")
 	print(sesi)
 	#sesi = j.autentikasi_user('messi','surabaya')
 	#print sesi
 	tokenid = sesi['tokenid']
-	print(j.proses("send {} henderson hello gimana kabarnya son " . format(tokenid)))
-	print(j.proses("send {} messi hello gimana kabarnya mess " . format(tokenid)))
+	print(j.proses("send {} nur hello gimana kabarnya rendi " . format(tokenid)))
+	print(j.proses("send {} afif hello gimana kabarnya dhafin " . format(tokenid)))
 
-	#print j.send_message(tokenid,'messi','henderson','hello son')
-	#print j.send_message(tokenid,'henderson','messi','hello si')
-	#print j.send_message(tokenid,'lineker','messi','hello si dari lineker')
+	#print j.send_message(tokenid,'afif','nur','hello son')
+	#print j.send_message(tokenid,'nur','afif','hello si')
+	#print j.send_message(tokenid,'lineker','afif','hello si dari lineker')
 
 
-	print("isi mailbox dari messi")
-	print(j.get_inbox('messi'))
-	print("isi mailbox dari henderson")
-	print(j.get_inbox('henderson'))
+	print("isi mailbox dari afif")
+	print(j.get_inbox('afif'))
+	print("isi mailbox dari nur")
+	print(j.get_inbox('nur'))
 
 
 

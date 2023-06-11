@@ -33,8 +33,5 @@ def main(page):
 
 
 if __name__=='__main__':
-    if (ON_WEB=="1"):
         ft.app(target=main,view=ft.WEB_BROWSER,port=8550)
-    else:
-        ft.app(target=main)
 
