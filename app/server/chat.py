@@ -106,7 +106,17 @@ class Chat:
 				usernamefrom = self.sessions[sessionid]['username']
 				logging.warning("SENDFILE: session {} send file from {} to {}" . format(sessionid, usernamefrom, usernameto))
 				return self.send_file(sessionid, usernamefrom, usernameto, filepath, encoded_file)
-			
+
+			elif (command=='sendgroup'):
+				sessionid = j[1].strip()
+				usernamesto = j[2].strip().split(',')
+				message=""
+				for w in j[3:]:
+					message="{} {}" . format(message,w)
+				usernamefrom = self.sessions[sessionid]['username']
+				logging.warning("SEND: session {} send message from {} to {}" . format(sessionid, usernamefrom,usernamesto))
+				return self.send_group_message(sessionid,usernamefrom,usernamesto,message)
+
 			elif (command=='send_file_group'):
 				sessionid = j[1].strip()
 				usernamesto = j[2].strip().split(',')
