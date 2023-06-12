@@ -141,6 +141,7 @@ class Chat:
 					message = "{} {}".format(message, w)
 				print(message)
 				logging.warning("RECVREALMPRIVATEMSG: recieve message from {} to {} in realm {}".format( usernamefrom, usernameto, realm_id))
+				return self.recv_realm_message(realm_id, usernamefrom, usernameto, message, data)
 	# -----------------------------End Beda Server---------------------------------------------------------------
 
 			else:
