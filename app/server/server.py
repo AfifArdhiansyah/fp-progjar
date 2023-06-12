@@ -5,8 +5,6 @@ import json
 import logging
 from chat import Chat
 
-SERVER_IP=os.getenv('SERVER_IP') or "0.0.0.0"
-SERVER_PORT=os.getenv('SERVER_PORT') or "8889"
 
 chatserver = Chat()
 
