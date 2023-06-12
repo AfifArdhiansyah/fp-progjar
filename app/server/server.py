@@ -4,7 +4,6 @@ import threading
 import json
 import logging
 from chat import Chat
-
 chatserver = Chat()
 
 class ProcessTheClient(threading.Thread):
