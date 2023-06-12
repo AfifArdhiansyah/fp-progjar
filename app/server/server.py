@@ -4,6 +4,10 @@ import threading
 import json
 import logging
 from chat import Chat
+
+SERVER_IP=os.getenv('SERVER_IP') or "0.0.0.0"
+SERVER_PORT=os.getenv('SERVER_PORT') or "8889"
+
 chatserver = Chat()
 
 class ProcessTheClient(threading.Thread):
@@ -51,7 +55,7 @@ class Server(threading.Thread):
 	
 
 def main():
-    print("Server is running...")
+    print("Server is runninSg...")
     svr = Server()
     svr.start()
 

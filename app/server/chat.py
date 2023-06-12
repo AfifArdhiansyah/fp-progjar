@@ -302,7 +302,20 @@ class Chat:
 				msgs[users].append(s_fr['incoming'][users].get_nowait())
 			
 		return {'status': 'OK', 'messages': msgs}
+	def add_realm(self, realm_id, realm_dest_address, realm_dest_port, data):
+		j = data.split()
+		j[0] = "recvrealm"
+		data = ' '.join(j)
+		data += "\r\n"
+		if realm_id in self.realms:
+			return {'status': 'ERROR', 'message': 'Realm sudah ada'}
 
+		self.realms[realm_id] = RealmThreadCommunication(self, realm_dest_address, realm_dest_port)
+		result = self.realms[realm_id].sendstring(data)
+		return result
+	def recv_realm(self, realm_id, realm_dest_address, realm_dest_port, data):
+		self.realms[realm_id] = RealmThreadCommunication(self, realm_dest_address, realm_dest_port)
+		return {'status':'OK'}
 
 if __name__=="__main__":
 	j = Chat()
