@@ -183,6 +183,9 @@ class Chat:
 				username = self.sessions[sessionid]['username']
 				logging.warning("GETREALMINBOX: {} from realm {}".format(sessionid, realmid))
 				return self.get_realm_inbox(username, realmid)
+			elif (command == 'logout'):
+				sessionid = j[1].strip()
+				return self.logout(sessionid)
 			
 			else:
 				return {'status': 'ERROR', 'message': '**Protocol Tidak Benar'}
@@ -516,6 +519,15 @@ class Chat:
 			message = {'msg_from': s_fr['nama'], 'msg_to': s_to['nama'], 'msg': message }
 			self.realms[realm_id].put(message)
 		return {'status': 'OK', 'message': 'Message Sent to Group in Realm'}
+	def logout (self, sessionid):
+		if (bool(self.sessions) == True):
+			del self.sessions[sessionid]
+			return {'status': 'OK'}
+		else:
+			return {'status': 'ERROR', 'message': 'Belum Login'}
+	
+    
+        
 
 if __name__=="__main__":
 	j = Chat()
