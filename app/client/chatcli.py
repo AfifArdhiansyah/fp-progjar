@@ -3,15 +3,14 @@ import os
 import json
 import base64
 
-TARGET_IP = os.getenv("SERVER_IP") or "127.0.0.1"
-TARGET_PORT = os.getenv("SERVER_PORT") or "8889"
-
+TARGET_IP = os.getenv("SERVER_IP") or REDACTED
+TARGET_PORT = os.getenv("SERVER_PORT") or REDACTED
 
 class ChatClient:
     def __init__(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print(TARGET_IP)
-        print(TARGET_PORT)
+        # print(TARGET_IP)
+        # print(TARGET_PORT)
         self.server_address = (TARGET_IP,int(TARGET_PORT))
         self.sock.connect(self.server_address)
         self.tokenid=""
@@ -23,24 +22,65 @@ class ChatClient:
                 username=j[1].strip()
                 password=j[2].strip()
                 return self.login(username,password)
+            elif (command=='addrealm'):
+                realmid = j[1].strip()
+                realm_address = j[2].strip()
+                realm_port = j[3].strip()
+                return self.add_realm(realmid, realm_address, realm_port)
             elif (command=='send'):
                 usernameto = j[1].strip()
                 message=""
                 for w in j[2:]:
-                   message="{} {}" . format(message,w)
-                return self.sendmessage(usernameto,message)
+                    message="{} {}" . format(message,w)
+                return self.send_message(usernameto,message)
+            elif (command=='sendfile'):
+                usernameto = j[1].strip()
+                filepath = j[2].strip()
+                return self.send_file(usernameto,filepath)
             elif (command=='sendgroup'):
                 usernamesto = j[1].strip()
                 message=""
                 for w in j[2:]:
                     message="{} {}" . format(message,w)
                 return self.send_group_message(usernamesto,message)
+            elif (command=='sendgroupfile'):
+                usernamesto = j[1].strip()
+                filepath = j[2].strip()
+                return self.send_group_file(usernamesto,filepath)
+            elif (command == 'sendprivaterealm'):
+                realmid = j[1].strip()
+                username_to = j[2].strip()
+                message = ""
+                for w in j[3:]:
+                    message = "{} {}".format(message, w)
+                return self.send_realm_message(realmid, username_to, message)
+            elif (command=='sendfilerealm'):
+                realmid = j[1].strip()
+                usernameto = j[2].strip()
+                filepath = j[3].strip()
+                return self.send_file_realm(realmid, usernameto,filepath)
+            elif (command=='sendgrouprealm'):
+                realmid = j[1].strip()
+                usernamesto = j[2].strip()
+                message=""
+                for w in j[3:]:
+                    message="{} {}" . format(message,w)
+                return self.send_group_realm_message(realmid, usernamesto,message)
+            elif (command=='sendgroupfilerealm'):
+                realmid = j[1].strip()
+                usernamesto = j[2].strip()
+                filepath = j[3].strip()
+                return self.send_group_file_realm(realmid, usernamesto,filepath)
             elif (command=='inbox'):
                 return self.inbox()
+            elif (command == 'getrealminbox'):
+                realmid = j[1].strip()
+                return self.realm_inbox(realmid)
             else:
                 return "*Maaf, command tidak benar"
         except IndexError:
-                return "-Maaf, command tidak benar"
+            return "-Maaf, command tidak benar"
+    
     def sendstring(self,string):
         try:
             self.sock.sendall(string.encode())
