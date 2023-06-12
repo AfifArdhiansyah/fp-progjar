@@ -75,13 +75,11 @@ class Chat:
 				usernamefrom = self.sessions[sessionid]['username']
 				logging.warning("SEND: session {} send message from {} to {}" . format(sessionid, usernamefrom,usernameto))
 				return self.send_message(sessionid,usernamefrom,usernameto,message)
-			
 			elif (command=='inbox'):
 				sessionid = j[1].strip()
 				username = self.sessions[sessionid]['username']
 				logging.warning("INBOX: {}" . format(sessionid))
 				return self.get_inbox(username)
-			
 			elif (command=='send_group'):
 				sessionid = j[1].strip()
 				usernamesto = j[2].strip().split(',')
@@ -91,15 +89,14 @@ class Chat:
 					usernamefrom = self.sessions[sessionid]['username']
 				logging.warning("SEND: session {} send message from {} to {}" . format(sessionid, usernamefrom, usernamesto))
 				return self.send_group_message(sessionid, usernamefrom, usernamesto, message)
-			
-			elif (command=='send_file'):
+			elif (command=='sendfile'):
 				sessionid = j[1].strip()
 				usernameto = j[2].strip()
-				filename = j[3].strip()
-				encoded = j[4].strip()
+				filepath = j[3].strip()
+				encoded_file = j[4].strip()
 				usernamefrom = self.sessions[sessionid]['username']
-				logging.warning("SEND: session {} send message from {} to {}" . format(sessionid, usernamefrom, usernameto))
-				return self.send_file(sessionid, usernamefrom, usernameto, filename, encoded)
+				logging.warning("SENDFILE: session {} send file from {} to {}" . format(sessionid, usernamefrom, usernameto))
+				return self.send_file(sessionid, usernamefrom, usernameto, filepath, encoded_file)
 			
 			elif (command=='send_file_group'):
 				sessionid = j[1].strip()
@@ -186,15 +183,16 @@ class Chat:
 				username = self.sessions[sessionid]['username']
 				logging.warning("GETREALMINBOX: {} from realm {}".format(sessionid, realmid))
 				return self.get_realm_inbox(username, realmid)
-            
-	# -----------------------------End Beda Server---------------------------------------------------------------
-
+			
 			else:
 				return {'status': 'ERROR', 'message': '**Protocol Tidak Benar'}
 		except KeyError:
 			return { 'status': 'ERROR', 'message' : 'Informasi tidak ditemukan'}
 		except IndexError:
 			return {'status': 'ERROR', 'message': '--Protocol Tidak Benar'}
+            
+	# -----------------------------End Beda Server---------------------------------------------------------------
+
 	def autentikasi_user(self,username,password):
 		if (username not in self.users):
 			return { 'status': 'ERROR', 'message': 'User Tidak Ada' }
@@ -258,7 +256,7 @@ class Chat:
 		
 		return {'status': 'OK', 'message': 'Message Sent'}
 
-	def send_file(self, sessionid, username_from, username_dest, filename_path, encoded):
+	def send_file(self, sessionid, username_from, username_dest, filepath ,encoded_file):
 		if sessionid not in self.sessions:
 			return {'status': 'ERROR', 'message': 'Session Tidak Ditemukan'}
         
@@ -267,14 +265,14 @@ class Chat:
 
 		if s_fr is False or s_to is False:
 			return {'status': 'ERROR', 'message': 'User Tidak Ditemukan'}
-		    
-		filename = os.path.basename(filename_path)
+
+		filename = os.path.basename(filepath)
 		message = {
-				'msg_from': s_fr['nama'],
-				'msg_to': s_to['nama'],
-				'file_name': filename,
-				'file_content': encoded
-		}
+            'msg_from': s_fr['nama'],
+            'msg_to': s_to['nama'],
+            'file_name': filename,
+            'file_content': encoded_file
+        }
 
 		outqueue_sender = s_fr['outgoing']
 		inqueue_receiver = s_to['incoming']
@@ -288,7 +286,8 @@ class Chat:
 		except KeyError:
 			inqueue_receiver[username_from] = Queue()
 			inqueue_receiver[username_from].put(json.dumps(message))
-		
+        
+        # Simpan file ke folder dengan nama yang mencerminkan waktu pengiriman dan nama asli file
 		now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 		folder_name = f"{now}_{username_from}_{username_dest}_{filename}"
 		folder_path = join(dirname(realpath(__file__)), 'files/')
@@ -296,16 +295,14 @@ class Chat:
 		folder_path = join(folder_path, folder_name)
 		os.makedirs(folder_path, exist_ok=True)
 		file_destination = os.path.join(folder_path, filename)
-
-		if 'b' in encoded[0]:
-			msg = encoded[2:-1]
+		if 'b' in encoded_file[0]:
+			msg = encoded_file[2:-1]
 
 			with open(file_destination, "wb") as fh:
 				fh.write(base64.b64decode(msg))
-
 		else:
-			tail = encoded.split()
-				
+			tail = encoded_file.split()
+        
 		return {'status': 'OK', 'message': 'File Sent'}
 	
 	def send_file_group(self, sessionid, username_from, usernames_dest, filename_path, encoded):
@@ -529,16 +526,16 @@ if __name__=="__main__":
 	tokenid = sesi['tokenid']
 	print(j.proses("send {} nur hello gimana kabarnya rendi " . format(tokenid)))
 	print(j.proses("send {} afif hello gimana kabarnya dhafin " . format(tokenid)))
-
+	print(j.send_file(tokenid,'nur','rendi'))
 	#print j.send_message(tokenid,'afif','nur','hello son')
 	#print j.send_message(tokenid,'nur','afif','hello si')
 	#print j.send_message(tokenid,'lineker','afif','hello si dari lineker')
 
 
-	print("isi mailbox dari afif")
-	print(j.get_inbox('afif'))
-	print("isi mailbox dari nur")
-	print(j.get_inbox('nur'))
+	# print("isi mailbox dari afif")
+	# print(j.get_inbox('afif'))
+	# print("isi mailbox dari nur")
+	# print(j.get_inbox('nur'))
 
 
 
