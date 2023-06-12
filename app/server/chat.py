@@ -121,6 +121,17 @@ class Chat:
 				realm_dest_address = j[2].strip()
 				realm_dest_port = int(j[3].strip())
 				return self.recv_realm(realm_id, realm_dest_address, realm_dest_port, data)
+			elif (command == 'sendprivaterealm'):
+				sessionid = j[1].strip()
+				realm_id = j[2].strip()
+				usernameto = j[3].strip()
+				message = ""
+				for w in j[4:]:
+					message = "{} {}".format(message, w)
+				print(message)
+				usernamefrom = self.sessions[sessionid]['username']
+				logging.warning("SENDPRIVATEREALM: session {} send message from {} to {} in realm {}".format(sessionid, usernamefrom, usernameto, realm_id))
+				return self.send_realm_message(sessionid, realm_id, usernamefrom, usernameto, message, data)
 	# -----------------------------End Beda Server---------------------------------------------------------------
 
 			else:
