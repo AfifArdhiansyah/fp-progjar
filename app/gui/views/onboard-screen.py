@@ -1,13 +1,13 @@
 import random
 from math import pi
 
-import flet
+import flet as ft
 from flet import Container, ElevatedButton, Page, Stack, colors
 
 
 def main(page: Page):
 
-    size = 40
+    size = 36
     gap = 6
     duration = 2000
 
@@ -36,68 +36,92 @@ def main(page: Page):
     ]
 
     parts = [
-        # F
-        (0, 0, c1),
-        (0, 1, c1),
-        (0, 2, c1),
-        (0, 3, c1),
-        (0, 4, c1),
-        (1, 0, c1),
-        (1, 2, c1),
-        (2, 0, c1),
-        (2, 1, c1),
-        (2, 2, c1),
+        # R
+        (0, 0, c2),
+        (0, 1, c2),
+        (0, 2, c2),
+        (0, 3, c2),
+        (0, 4, c2),
+        (1, 0, c2),
+        (2, 0, c2),
 
-
-        # L
+        # O
         (4, 0, c2),
         (4, 1, c2),
         (4, 2, c2),
         (4, 3, c2),
         (4, 4, c2),
+        (5, 0, c2),
         (5, 4, c2),
+        (6, 0, c2),
+        (6, 1, c2),
+        (6, 2, c2),
+        (6, 3, c2),
         (6, 4, c2),
-        # E
-        (8, 0, c3),
-        (9, 0, c3),
-        (10, 0, c3),
-        (8, 1, c3),
-        (8, 2, c3),
-        (9, 2, c3),
-        (10, 2, c3),
-        (8, 3, c3),
-        (8, 4, c3),
-        (9, 4, c3),
-        (10, 4, c3),
-        # T
-        (12, 0, c4),
-        (13, 0, c4),
-        (14, 0, c4),
-        (13, 1, c4),
-        (13, 2, c4),
-        (13, 3, c4),
-        (13, 4, c4),
 
-        # R
-        (0, 6, c5),
-        (0, 7, c5),
-        (1, 6, c5),
-        (2, 6, c5),
-        (2, 7, c5),
-        (2, 8, c5),
-        (3, 6, c5),
-        (4, 9, c5),
-        (5, 6, c5),
-        (5, 7, c5),
-        (6, 6, c5),
-        (6, 8, c5),
-        (7, 6, c5),
-        (8, 6, c5),
-        (8, 7, c5),
-        (8, 8, c5),
+        # Y
+        (8, 0, c2),
+        (8, 1, c2),
+        (8, 2, c2),
+        (8, 4, c2),
+        (9, 2, c2),
+        (9, 4, c2),
+        (10, 0, c2), 
+        (10, 1, c2),
+        (10, 2, c2),
+        (10, 3, c2),
+        (10, 4, c2),
+
+        # C
+        (12, 0, c2),
+        (12, 1, c2),
+        (12, 2, c2),
+        (12, 3, c2),
+        (12, 4, c2),
+        (13, 0, c2),
+        (13, 4, c2),
+        (14, 0, c2),
+        (14, 4, c2),
+
+        # H
+        (16, 0, c2),
+        (16, 1, c2),
+        (16, 2, c2),
+        (16, 3, c2),
+        (16, 4, c2),
+        (17, 2, c2),
+        (18, 0, c2),
+        (18, 1, c2),
+        (18, 2, c2),
+        (18, 3, c2),
+        (18, 4, c2),
+
+        # A
+        (20, 0, c2),
+        (20, 1, c2),
+        (20, 2, c2),
+        (20, 3, c2),
+        (20, 4, c2),
+        (21, 0, c2),
+        (21, 2, c2),
+        (22, 0, c2),
+        (22, 1, c2),
+        (22, 2, c2),
+        (22, 3, c2),
+        (22, 4, c2),
+
+        # T
+        (24, 0, c2),
+        (25, 0, c2),
+        (25, 1, c2),
+        (25, 2, c2),
+        (25, 3, c2),
+        (25, 4, c2),
+        (26, 0, c2),
+
     ]
 
-    width = 16 * (size + gap)
+    width = 27 * (size + gap)
     height = 5 * (size + gap)
 
     canvas = Stack(
@@ -153,8 +177,9 @@ def main(page: Page):
         again_button.visible = True
         page.update()
 
+
     go_button = ElevatedButton("Go!", on_click=assemble)
-    again_button = ElevatedButton("Again!", on_click=randomize)
+    again_button = ElevatedButton("Go to chat!", on_click=lambda _: page.go('/group-screen'))
 
     randomize(None)
 
@@ -164,4 +189,4 @@ def main(page: Page):
     page.add(canvas, go_button, again_button)
 
 
-flet.app(main)
+ft.app(main)
