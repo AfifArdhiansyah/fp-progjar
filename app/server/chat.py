@@ -65,6 +65,14 @@ class Chat:
 				logging.warning("AUTH: auth {} {}" . format(username,password))
 				return self.autentikasi_user(username,password)
 			
+			if command == "register":
+				username = j[1].strip()
+				password = j[2].strip()
+				nama = j[3].strip()
+				negara = j[4].strip()
+				logging.warning("REGISTER: register {} {}".format(username, password))
+				return self.register_user(username, password, nama, negara)
+			
 # -----------------------------Start Server Sama---------------------------------------------------------------
 			elif (command=='send'):
 				sessionid = j[1].strip()
@@ -204,6 +212,24 @@ class Chat:
 		tokenid = str(uuid.uuid4()) 
 		self.sessions[tokenid]={ 'username': username, 'userdetail':self.users[username]}
 		return { 'status': 'OK', 'tokenid': tokenid }
+	
+	def register_user(self, username, password, nama, negara):
+		if username in self.users:
+			return {"status": "ERROR", "message": "User Sudah Ada"}
+		nama = nama.replace("_", " ")
+		self.users[username] = {
+            "nama": nama,
+            "negara": negara,
+            "password": password,
+            "incoming": {},
+            "outgoing": {},
+        }
+		tokenid = str(uuid.uuid4())
+		self.sessions[tokenid] = {
+            "username": username,
+            "userdetail": self.users[username],
+        }
+		return {"status": "OK", "tokenid": tokenid}
 	def get_user(self,username):
 		if (username not in self.users):
 			return False
