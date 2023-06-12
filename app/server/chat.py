@@ -400,6 +400,42 @@ class Chat:
 		self.realms[realm_id].sendstring(data)
 		return {'status': 'OK', 'message': 'File Sent to Realm'}
 	
+	def recv_file_realm(self, sessionid, realm_id, username_from, username_dest, filepath, encoded_file, data):
+		if (sessionid not in self.sessions):
+			return {'status': 'ERROR', 'message': 'Session Tidak Ditemukan'}
+		if (realm_id not in self.realms):
+			return {'status': 'ERROR', 'message': 'Realm Tidak Ditemukan'}
+		s_fr = self.get_user(username_from)
+		s_to = self.get_user(username_dest)
+		if (s_fr==False or s_to==False):
+			return {'status': 'ERROR', 'message': 'User Tidak Ditemukan'}
+        
+		filename = os.path.basename(filepath)
+		message = {
+            'msg_from': s_fr['nama'],
+            'msg_to': s_to['nama'],
+            'file_name': filename,
+            'file_content': encoded_file
+        }
+		self.realms[realm_id].put(message)
+        
+		now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+		folder_name = f"{now}_{username_from}_{username_dest}_{filename}"
+		folder_path = join(dirname(realpath(__file__)), 'files/')
+		os.makedirs(folder_path, exist_ok=True)
+		folder_path = join(folder_path, folder_name)
+		os.makedirs(folder_path, exist_ok=True)
+		file_destination = os.path.join(folder_path, filename)
+		if 'b' in encoded_file[0]:
+			msg = encoded_file[2:-1]
+
+			with open(file_destination, "wb") as fh:
+				fh.write(base64.b64decode(msg))
+		else:
+			tail = encoded_file.split()
+        
+		return {'status': 'OK', 'message': 'File Received to Realm'}
+	
 
 if __name__=="__main__":
 	j = Chat()
