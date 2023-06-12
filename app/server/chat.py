@@ -48,6 +48,7 @@ class Chat:
 	def __init__(self):
 		self.sessions={}
 		self.users = {}
+		self.realms = {}
 		self.users['dhafin']={ 'nama': 'Dhafin Almas', 'negara': 'Indonesia', 'password': 'Sidoarjo', 'incoming' : {}, 'outgoing': {}}
 		self.users['rendi']={ 'nama': 'Rendi Dwi', 'negara': 'Indonesia', 'password': 'Kediri', 'incoming' : {}, 'outgoing': {}}
 		self.users['fanny']={ 'nama': 'Fanny Faizul', 'negara': 'Indonesia', 'password': 'Bojonegoro', 'incoming' : {}, 'outgoing': {}}
@@ -128,7 +129,7 @@ class Chat:
 				message = ""
 				for w in j[4:]:
 					message = "{} {}".format(message, w)
-				print(message)
+				# print(message)
 				usernamefrom = self.sessions[sessionid]['username']
 				logging.warning("SENDPRIVATEREALM: session {} send message from {} to {} in realm {}".format(sessionid, usernamefrom, usernameto, realm_id))
 				return self.send_realm_message(sessionid, realm_id, usernamefrom, usernameto, message, data)
@@ -139,7 +140,7 @@ class Chat:
 				message = ""
 				for w in j[4:]:
 					message = "{} {}".format(message, w)
-				print(message)
+				# print(message)
 				logging.warning("RECVREALMPRIVATEMSG: recieve message from {} to {} in realm {}".format( usernamefrom, usernameto, realm_id))
 				return self.recv_realm_message(realm_id, usernamefrom, usernameto, message, data)
 			elif (command == 'sendfilerealm'):
@@ -179,6 +180,12 @@ class Chat:
 					message = "{} {}".format(message, w) 
 				logging.warning("RECVGROUPREALM: send message from {} to {} in realm {}".format(usernamefrom, usernamesto, realm_id))
 				return self.recv_group_realm_message(realm_id, usernamefrom,usernamesto, message,data)
+			elif (command == 'getrealminbox'):
+				sessionid = j[1].strip()
+				realmid = j[2].strip()
+				username = self.sessions[sessionid]['username']
+				logging.warning("GETREALMINBOX: {} from realm {}".format(sessionid, realmid))
+				return self.get_realm_inbox(username, realmid)
             
 	# -----------------------------End Beda Server---------------------------------------------------------------
 

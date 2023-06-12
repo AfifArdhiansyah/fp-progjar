@@ -3,15 +3,13 @@ import os
 import json
 import base64
 
-TARGET_IP = os.getenv("SERVER_IP") or REDACTED
-TARGET_PORT = os.getenv("SERVER_PORT") or REDACTED
 
 class ChatClient:
     def __init__(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # print(TARGET_IP)
         # print(TARGET_PORT)
-        self.server_address = (TARGET_IP,int(TARGET_PORT))
+        self.server_address = ('192.168.1.27',8889)
         self.sock.connect(self.server_address)
         self.tokenid=""
     def proses(self,cmdline):
@@ -43,7 +41,7 @@ class ChatClient:
                 for w in j[2:]:
                     message="{} {}" . format(message,w)
                 return self.send_group_message(usernamesto,message)
-            elif (command=='sendgroupfile'):
+            elif (command=='send_file_group'):
                 usernamesto = j[1].strip()
                 filepath = j[2].strip()
                 return self.send_group_file(usernamesto,filepath)
