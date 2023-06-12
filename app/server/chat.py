@@ -55,6 +55,7 @@ class Chat:
 		self.users['fian']={ 'nama': 'Fian Awamiry', 'negara': 'Indonesia', 'password': 'Lumajang', 'incoming' : {}, 'outgoing': {}}
 		self.users['nur']={ 'nama': 'Nur Muhammad', 'negara': 'Indonesia', 'password': 'Madiun', 'incoming' : {}, 'outgoing': {}}
 		self.users['afif']={ 'nama': 'Afif Dwi', 'negara': 'Indonesia', 'password': 'Gresik', 'incoming' : {}, 'outgoing': {}}
+		self.users['anton'] = { 'name': 'Antonio Taifan', 'country': 'Indonesia', 'password': 'surabaya', 'incoming' : {}, 'outgoing': {}}
 	def proses(self,data):
 		j=data.split(" ")
 		try:
@@ -105,7 +106,17 @@ class Chat:
 				usernamefrom = self.sessions[sessionid]['username']
 				logging.warning("SENDFILE: session {} send file from {} to {}" . format(sessionid, usernamefrom, usernameto))
 				return self.send_file(sessionid, usernamefrom, usernameto, filepath, encoded_file)
-			
+
+			elif (command=='sendgroup'):
+				sessionid = j[1].strip()
+				usernamesto = j[2].strip().split(',')
+				message=""
+				for w in j[3:]:
+					message="{} {}" . format(message,w)
+				usernamefrom = self.sessions[sessionid]['username']
+				logging.warning("SEND: session {} send message from {} to {}" . format(sessionid, usernamefrom,usernamesto))
+				return self.send_group_message(sessionid,usernamefrom,usernamesto,message)
+
 			elif (command=='send_file_group'):
 				sessionid = j[1].strip()
 				usernamesto = j[2].strip().split(',')
