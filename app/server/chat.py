@@ -346,6 +346,16 @@ class Chat:
 		data += "\r\n"
 		self.realms[realm_id].sendstring(data)
 		return {'status': 'OK', 'message': 'Message Sent to Realm'}
+	def recv_realm_message(self, realm_id, username_from, username_dest, message, data):
+		if (realm_id not in self.realms):
+			return {'status': 'ERROR', 'message': 'Realm Tidak Ditemukan'}
+		s_fr = self.get_user(username_from)
+		s_to = self.get_user(username_dest)
+		if (s_fr==False or s_to==False):
+			return {'status': 'ERROR', 'message': 'User Tidak Ditemukan'}
+		message = { 'msg_from': s_fr['nama'], 'msg_to': s_to['nama'], 'msg': message }
+		self.realms[realm_id].put(message)
+		return {'status': 'OK', 'message': 'Message Sent to Realm'}
 
 if __name__=="__main__":
 	j = Chat()
