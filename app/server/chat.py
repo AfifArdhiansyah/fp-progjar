@@ -132,6 +132,34 @@ class Chat:
 				usernamefrom = self.sessions[sessionid]['username']
 				logging.warning("SENDPRIVATEREALM: session {} send message from {} to {} in realm {}".format(sessionid, usernamefrom, usernameto, realm_id))
 				return self.send_realm_message(sessionid, realm_id, usernamefrom, usernameto, message, data)
+			elif (command == 'recvrealmprivatemsg'):
+				usernamefrom = j[1].strip()
+				realm_id = j[2].strip()
+				usernameto = j[3].strip()
+				message = ""
+				for w in j[4:]:
+					message = "{} {}".format(message, w)
+				print(message)
+				logging.warning("RECVREALMPRIVATEMSG: recieve message from {} to {} in realm {}".format( usernamefrom, usernameto, realm_id))
+				return self.recv_realm_message(realm_id, usernamefrom, usernameto, message, data)
+			elif (command == 'sendfilerealm'):
+				sessionid = j[1].strip()
+				realm_id = j[2].strip()
+				usernameto = j[3].strip()
+				filepath = j[4].strip()
+				encoded_file = j[5].strip()
+				usernamefrom = self.sessions[sessionid]['username']
+				logging.warning("SENDFILEREALM: session {} send file from {} to {} in realm {}".format(sessionid, usernamefrom, usernameto, realm_id))
+				return self.send_file_realm(sessionid, realm_id, usernamefrom, usernameto, filepath, encoded_file, data)
+			elif (command == 'recvfilerealm'):
+				sessionid = j[1].strip()
+				realm_id = j[2].strip()
+				usernameto = j[3].strip()
+				filepath = j[4].strip()
+				encoded_file = j[5].strip()
+				usernamefrom = self.sessions[sessionid]['username']
+				logging.warning("RECVFILEREALM: session {} send file from {} to {} in realm {}".format(sessionid, usernamefrom, usernameto, realm_id))
+				return self.recv_file_realm(sessionid, realm_id, usernamefrom, usernameto, filepath, encoded_file, data)
 	# -----------------------------End Beda Server---------------------------------------------------------------
 
 			else:
