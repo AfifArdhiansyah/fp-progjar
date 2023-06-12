@@ -160,6 +160,17 @@ class Chat:
 				usernamefrom = self.sessions[sessionid]['username']
 				logging.warning("RECVFILEREALM: session {} send file from {} to {} in realm {}".format(sessionid, usernamefrom, usernameto, realm_id))
 				return self.recv_file_realm(sessionid, realm_id, usernamefrom, usernameto, filepath, encoded_file, data)
+			elif (command == 'sendgrouprealm'):
+				sessionid = j[1].strip()
+				realm_id = j[2].strip()
+				usernamesto = j[3].strip().split(',')
+				message = ""
+				for w in j[4:]:
+					message = "{} {}".format(message, w)
+				usernamefrom = self.sessions[sessionid]['username']
+				logging.warning("SENDGROUPREALM: session {} send message from {} to {} in realm {}".format(sessionid, usernamefrom, usernamesto, realm_id))
+				return self.send_group_realm_message(sessionid, realm_id, usernamefrom,usernamesto, message,data)
+            
 	# -----------------------------End Beda Server---------------------------------------------------------------
 
 			else:
@@ -463,6 +474,25 @@ class Chat:
 			tail = encoded_file.split()
         
 		return {'status': 'OK', 'message': 'File Received to Realm'}
+	
+	def send_group_realm_message(self, sessionid, realm_id, username_from, usernames_to, message, data):
+		if (sessionid not in self.sessions):
+			return {'status': 'ERROR', 'message': 'Session Tidak Ditemukan'}
+		if realm_id not in self.realms:
+			return {'status': 'ERROR', 'message': 'Realm Tidak Ditemukan'}
+		s_fr = self.get_user(username_from)
+		for username_to in usernames_to:
+			s_to = self.get_user(username_to)
+			message = {'msg_from': s_fr['nama'], 'msg_to': s_to['nama'], 'msg': message }
+			self.realms[realm_id].put(message)
+        
+		j = data.split()
+		j[0] = "recvrealmgroupmsg"
+		j[1] = username_from
+		data = ' '.join(j)
+		data +="\r\n"
+		self.realms[realm_id].sendstring(data)
+		return {'status': 'OK', 'message': 'Message Sent to Group in Realm'}
 	
 
 if __name__=="__main__":
