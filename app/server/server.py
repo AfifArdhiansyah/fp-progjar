@@ -55,10 +55,9 @@ class Server(threading.Thread):
 	
 
 def main():
-    print("Server is running...")
+    print("Server is runninSg...")
     svr = Server()
     svr.start()
 
-if __name__=="__main__":
 if __name__=="__main__":
 	main()
