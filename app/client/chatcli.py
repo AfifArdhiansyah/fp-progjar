@@ -158,21 +158,23 @@ class ChatClient:
         else:
             return "Error, {}".format(result['message'])
         
-    def send_file_realm(self, realmid, usernameto, filepath):
+    def send_file(self, usernameto="xxx", filepath="xxx"):
         if (self.tokenid==""):
             return "Error, not authorized"
+
         if not os.path.exists(filepath):
             return {'status': 'ERROR', 'message': 'File not found'}
         
         with open(filepath, 'rb') as file:
             file_content = file.read()
-            encoded_content = base64.b64encode(file_content)
-        string="sendfilerealm {} {} {} {}\r\n" . format(self.tokenid, realmid, usernameto, filepath, encoded_content)
+            encoded_content = base64.b64encode(file_content)  # Decode byte-string to UTF-8 string
+        string="sendfile {} {} {} {}\r\n" . format(self.tokenid,usernameto,filepath,encoded_content)
+
         result = self.sendstring(string)
         if result['status']=='OK':
-            return "File sent to realm {}".format(realmid)
+            return "file sent to {}" . format(usernameto)
         else:
-            return "Error, {}".format(result['message'])
+            return "Error, {}" . format(result['message'])
     
     def add_realm(self, realmid, realm_address, realm_port):
         if (self.tokenid==""):
