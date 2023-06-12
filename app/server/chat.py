@@ -64,7 +64,7 @@ class Chat:
 				logging.warning("AUTH: auth {} {}" . format(username,password))
 				return self.autentikasi_user(username,password)
 			
-# -----------------------------Server Sama---------------------------------------------------------------
+# -----------------------------Start Server Sama---------------------------------------------------------------
 			elif (command=='send'):
 				sessionid = j[1].strip()
 				usernameto = j[2].strip()
@@ -109,7 +109,19 @@ class Chat:
 				logging.warning("SEND: session {} send message from {} to {}" . format(sessionid, usernamefrom, usernamesto))
 				return self.send_file_group(sessionid, usernamefrom, usernamesto, filename, encoded)
 
-# -----------------------------Emd Server Sama---------------------------------------------------------------
+# -----------------------------End Server Sama---------------------------------------------------------------
+# -----------------------------Start Beda Server---------------------------------------------------------------
+			elif (command=='addrealm'):
+				realm_id = j[1].strip()
+				realm_dest_address = j[2].strip()
+				realm_dest_port = int(j[3].strip())
+				return self.add_realm(realm_id, realm_dest_address, realm_dest_port, data)
+			elif (command=='recvrealm'):
+				realm_id = j[1].strip()
+				realm_dest_address = j[2].strip()
+				realm_dest_port = int(j[3].strip())
+				return self.recv_realm(realm_id, realm_dest_address, realm_dest_port, data)
+	# -----------------------------End Beda Server---------------------------------------------------------------
 
 			else:
 				return {'status': 'ERROR', 'message': '**Protocol Tidak Benar'}
