@@ -55,7 +55,6 @@ class Chat:
 		self.users['fian']={ 'nama': 'Fian Awamiry', 'negara': 'Indonesia', 'password': 'Lumajang', 'incoming' : {}, 'outgoing': {}}
 		self.users['nur']={ 'nama': 'Nur Muhammad', 'negara': 'Indonesia', 'password': 'Madiun', 'incoming' : {}, 'outgoing': {}}
 		self.users['afif']={ 'nama': 'Afif Dwi', 'negara': 'Indonesia', 'password': 'Gresik', 'incoming' : {}, 'outgoing': {}}
-		self.users['anton'] = { 'name': 'Antonio Taifan', 'country': 'Indonesia', 'password': 'surabaya', 'incoming' : {}, 'outgoing': {}}
 	def proses(self,data):
 		j=data.split(" ")
 		try:
