@@ -123,7 +123,7 @@ class Chat:
 				filename = j[3].strip()
 				encoded = j[4].strip()
 				usernamefrom = self.sessions[sessionid]['username']
-				logging.warning("SEND: session {} send message from {} to {}" . format(sessionid, usernamefrom, usernamesto))
+				logging.warning("SEND: session {} send message from {} to {}" . format(sessionid, usernamefrom, j[2].strip()))
 				return self.send_file_group(sessionid, usernamefrom, usernamesto, filename, encoded)
 
 # -----------------------------End Server Sama---------------------------------------------------------------
@@ -196,11 +196,11 @@ class Chat:
 				logging.warning("RECVGROUPREALM: send message from {} to {} in realm {}".format(usernamefrom, usernamesto, realm_id))
 				return self.recv_group_realm_message(realm_id, usernamefrom,usernamesto, message,data)
 			elif (command == 'getrealminbox'):
-				sessionid = j[1].strip()
-				realmid = j[2].strip()
-				username = self.sessions[sessionid]['username']
-				logging.warning("GETREALMINBOX: {} from realm {}".format(sessionid, realmid))
-				return self.get_realm_inbox(username, realmid)
+				session_id = j[1].strip()
+				realm_id = j[2].strip()
+				username = self.sessions[session_id]['username']
+				logging.warning("INBOX: {} in realm {}".format(session_id, realm_id))
+				return self.inbox_realm(session_id, username, realm_id, data)
 			elif (command == 'logout'):
 				sessionid = j[1].strip()
 				return self.logout(sessionid)
@@ -353,7 +353,9 @@ class Chat:
 
 		filename = os.path.basename(filename_path)
 		for username_dest in usernames_dest:
+			print(username_dest)
 			s_to = self.get_user(username_dest)
+			print(s_to)
 			if s_to is False:
 				continue
 			message = {
@@ -390,9 +392,9 @@ class Chat:
 					fh.write(base64.b64decode(msg))
 			
 			else:
-				tail = encoded.split()
+				encoded.split()
         
-			return {'status': 'OK', 'message': 'file sent'}
+		return {'status': 'OK', 'message': 'file sent'}
 
 	def get_inbox(self,username):
 		s_fr = self.get_user(username)
@@ -404,6 +406,22 @@ class Chat:
 				msgs[users].append(s_fr['incoming'][users].get_nowait())
 			
 		return {'status': 'OK', 'messages': msgs}
+	def inbox_realm(self, session_id, username, realm_id, data):
+		if (session_id not in self.sessions):
+			return {'status': 'ERROR', 'message': 'Session Tidak Ditemukan'}
+		if (realm_id not in self.realms):
+			return {'status': 'ERROR', 'message': 'Realm Tidak Terdaftar'}
+
+		s_fr = self.get_user(username)
+		if (s_fr == False):
+				return {'status': 'ERROR', 'message': 'User Tidak Terdaftar'}
+			
+		j = data.split()
+		j[0] = "chatrealm"
+		data = ' '.join(j)
+		data += "\r\n"
+		return self.realms[realm_id].sendstring(data)
+		
 	def add_realm(self, realm_id, realm_dest_address, realm_dest_port, data):
 		j = data.split()
 		j[0] = "recvrealm"
