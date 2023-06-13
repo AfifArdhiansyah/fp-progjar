@@ -9,7 +9,7 @@ ON_WEB = os.getenv("ONWEB") or "1"
 
 def main(page: ft.Page):
     page.title = "Client"
-    is_login = False
+    is_login = True
 
     # login
     global login_dialog
@@ -60,7 +60,7 @@ def main(page: ft.Page):
                 # ft.ElevatedButton("Login", on_click=login_click)
                 ft.ElevatedButton("Login")
             ],
-            actions_alignment="end",
+            actions_alignment="center",
         )
     
     username_field = ft.TextField(label="Username", autofocus=True)
@@ -71,8 +71,8 @@ def main(page: ft.Page):
         autofocus=True,
         # on_submit=login_click,
     )
-    name = ft.TextField(label="name", autofocus=True)
-    country = ft.TextField(label="country", autofocus=True)
+    name = ft.TextField(label="Name", autofocus=True)
+    country = ft.TextField(label="Country", autofocus=True)
     
     login_dialog()
 
@@ -98,26 +98,42 @@ def main(page: ft.Page):
             ft.View(
                 "/",
                 [
-                    # menu,
-                    ft.Card(
-                        content=ft.Container(
-                            content=ft.Column(
-                                [
-                                    ft.ListTile(
-                                        leading=ft.Icon(ft.icons.PERSON),
-                                        title=ft.Text("Private Chat"),
-                                        on_click=lambda _: page.go("/private"),
-                                    ),
-                                    ft.ListTile(
-                                        leading=ft.Icon(ft.icons.GROUP),
-                                        title=ft.Text("Group Chat"),
-                                        on_click=lambda _: page.go("/group"),
-                                    ),
-                                ],
-                            ),
-                            padding=ft.padding.symmetric(vertical=10),
+                    # ft.Card(
+                    #     content=ft.Container(
+                    #         content=ft.Column(
+                    #             [
+                    #                 ft.ListTile(
+                    #                     leading=ft.Icon(ft.icons.PERSON),
+                    #                     title=ft.Text("Private Chat"),
+                    #                     on_click=lambda _: page.go("/private"),
+                    #                 ),
+                    #                 ft.ListTile(
+                    #                     leading=ft.Icon(ft.icons.GROUP),
+                    #                     title=ft.Text("Group Chat"),
+                    #                     on_click=lambda _: page.go("/group"),
+                    #                 ),
+                    #             ],
+                    #         ),
+                    #         padding=ft.padding.symmetric(vertical=10),
+                    #     )
+                    # ),
+                    ft.Container(
+                        alignment=ft.alignment.center,
+                        content=ft.Tabs(
+                            tabs = [
+                                ft.Tab(
+                                    text="                                      Private Chat                                        ",
+                                    icon=ft.Icon(ft.icons.PERSON),
+                                    # route="/private",
+                                ),
+                                ft.Tab(
+                                    text="                                      Group Chat                                    ",
+                                    icon=ft.Icon(ft.icons.GROUP),
+                                    # route="/group",
+                                ),
+                            ]
                         )
-                    ),
+                    )               
                 ],
             )
         )
