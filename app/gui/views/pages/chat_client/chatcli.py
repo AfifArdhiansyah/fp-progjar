@@ -111,8 +111,6 @@ class ChatClient:
         string="auth {} {} \r\n" . format(username,password)
         result = self.sendstring(string)
         if result['status']=='OK':
-            self.username=username
-            self.password=password
             self.tokenid=result['tokenid']
             return "username {} logged in, token {} " .format(username,self.tokenid)
         else:
