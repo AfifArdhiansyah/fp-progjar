@@ -9,7 +9,7 @@ import os
 class ChatClient:
     def __init__(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_address = ("192.168.56.1",8889)
+        self.server_address = ("127.0.0.1",8889)
         self.sock.connect(self.server_address)
         self.tokenid=""
         self.username=""

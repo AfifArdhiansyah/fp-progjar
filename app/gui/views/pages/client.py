@@ -112,10 +112,10 @@ class ChatRoom:
 
 def main(page: ft.Page):
     page.title = "Client"
-    is_login = False
+    
 
     chat_client = ChatClient()
-
+    is_login = False
     # login
     global login_dialog
     def login_dialog():
@@ -183,6 +183,12 @@ def main(page: ft.Page):
                 page.go("/")
             else:
                 ft.alert("Username or password is wrong")
+
+    def logout_click(e):
+        is_login = False
+        chat_client.logout()
+        login_dialog()
+        page.update()
     
     username_field = ft.TextField(label="Username", autofocus=True)
     password_field = ft.TextField(
@@ -202,6 +208,7 @@ def main(page: ft.Page):
     def route_change(__route__):
         troute = ft.TemplateRoute(page.route)
         chat_room = ChatRoom(page, chat_client, chat_client.username, target_user)
+        
 
         page.views.clear()
 
@@ -215,6 +222,7 @@ def main(page: ft.Page):
                                 text="                                      Private Chat                                        ",
                                 content = ft.Column([
                                     ft.Text(chat_client.info()),
+                                    ft.IconButton(icon=ft.icons.LOGOUT,tooltip="Logout",on_click=logout_click),
                                     ft.Row([chat_room.send_to_field]),
                                     ft.Row([chat_room.chat, chat_room.send, chat_room.file_pick]),
                                 ])
