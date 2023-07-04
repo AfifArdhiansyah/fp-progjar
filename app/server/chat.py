@@ -203,6 +203,8 @@ class Chat:
 			elif (command == 'logout'):
 				sessionid = j[1].strip()
 				return self.logout(sessionid)
+			elif (command=='info'):
+				return self.info()
 			
 			else:
 				return {'status': 'ERROR', 'message': '**Protocol Tidak Benar'}
@@ -575,6 +577,8 @@ class Chat:
 			return {'status': 'OK'}
 		else:
 			return {'status': 'ERROR', 'message': 'Belum Login'}
+	def info(self):
+		return {'status': 'OK', 'message': self.sessions}
 	
     
         
